@@ -8,4 +8,8 @@ const k = kaplay({
 	background: "#fae293",
 });
 
+k.scene("game", () => {
+	k.setGravity(1000);
+});
+
 export default k;

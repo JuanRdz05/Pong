@@ -1,5 +1,16 @@
-import kaplay from "kaplay";
+import ballConfiguration from "./ballConfiguration.js";
+import k from "../CANVAS/canvas.js";
 
-const ball = add([circle(10), pos(100, 20)]);
+const ball = add([
+	circle(ballConfiguration.radius),
+	pos(ballConfiguration.position_x, ballConfiguration.position_y),
+	color("#c99355"),
+	area(),
+	body({
+		mass: 1,
+		isStatic: false,
+	}),
+	"ball",
+]);
 
 export default ball;

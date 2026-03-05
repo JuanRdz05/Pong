@@ -1,7 +1,7 @@
 const playerConfiguration = {
-	width: 20,
-	height: 50,
-	speed: 300,
+	width: 25,
+	height: 90,
+	speed: 700,
 };
 
 export default playerConfiguration;
