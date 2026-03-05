@@ -2,10 +2,6 @@ import player from "./player.js";
 import playerConfig from "./configuration.js";
 import k from "../CANVAS/canvas.js";
 
-const limits = {
-	y: k.height - playerConfig.height,
-};
-
 const playerMovement = [
 	onKeyDown("w", () => {
 		if (player.pos.y > 0) {
