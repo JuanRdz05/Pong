@@ -1,6 +1,6 @@
 const playerConfiguration = {
 	width: 25,
-	height: 90,
+	height: 100,
 	speed: 700,
 };
 
