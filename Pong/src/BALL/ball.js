@@ -12,6 +12,8 @@ export default function createBall() {
 			mass: 1,
 			isStatic: false,
 		}),
+		k.outline(2, k.rgb(184, 124, 57)),
+
 		"ball",
 	]);
 }

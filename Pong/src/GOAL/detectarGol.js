@@ -3,12 +3,20 @@ import createBall from "../BALL/ball.js";
 import { initBallMovement } from "../BALL/CONTROLLERS/movement";
 import { bounce } from "../BALL/CONTROLLERS/movement";
 import hitSound from "../SOUNDS/hit_sound.wav";
+import goalSound from "../SOUNDS/goal_sound.wav";
 
 //Cargamos el sonido de impacto
 k.loadSound("impact", hitSound);
+k.loadSound("goal_sound", goalSound);
+let goalHandle = null;
 
 export function detectGoal(p1, p2, scoreP1, scoreP2) {
 	k.onCollide("ball", "goal", (ball, goal) => {
+		goalHandle = k.play("goal_sound", {
+			volume: 2,
+			speed: 2,
+		});
+
 		if (goal.is("left")) {
 			//Anoto el jugador de la derecha
 			p2.updateScore();
@@ -18,7 +26,6 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 			p1.updateScore();
 			scoreP1.text = p1.score;
 		}
-
 		k.destroy(ball);
 		k.wait(1, () => {
 			const newBall = createBall();

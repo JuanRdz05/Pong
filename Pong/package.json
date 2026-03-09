@@ -1,5 +1,5 @@
 {
-	"name": "Pong",
+	"name": "pong",
 	"type": "module",
 	"scripts": {
 		"build": "vite build",
