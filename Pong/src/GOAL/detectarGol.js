@@ -3,18 +3,16 @@ import createBall from "../BALL/ball.js";
 import { initBallMovement } from "../BALL/CONTROLLERS/movement";
 import { bounce } from "../BALL/CONTROLLERS/movement";
 
-export function detectGoal(p1, p2) {
+export function detectGoal(p1, p2, scoreP1, scoreP2) {
 	k.onCollide("ball", "goal", (ball, goal) => {
 		if (goal.is("left")) {
 			//Anoto el jugador de la derecha
 			p2.updateScore();
-			console.log("Jugador ha anotado 2: " + p2.score);
-			k.debug.log("Jugador ha anotado 2: " + p2.score);
+			scoreP2.text = p2.score;
 		} else if (goal.is("right")) {
 			//Anoto el jugador de la izquierda
 			p1.updateScore();
-			console.log("Jugador ha anotado 1: " + p1.score);
-			k.debug.log("Jugador ha anotado 1: " + p1.score);
+			scoreP1.text = p1.score;
 		}
 
 		k.destroy(ball);

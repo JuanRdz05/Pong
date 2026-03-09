@@ -17,10 +17,38 @@ k.scene("game", () => {
 	//Inicializar el sistema
 	initBallMovement(b);
 	initPlayerControls(p1, p2, playerConfiguration);
+	// Texto de puntuación
+	const scoreP1 = k.add([
+		k.text("0", {
+			size: 50,
+			width: 300,
+			align: "center",
+			font: "sans-serif",
+		}),
+		k.pos(k.width() / 4, 50),
+		k.color("#c99355"),
+		k.anchor("center"),
+		k.outline(4, k.Color.BLACK),
+		k.z(100),
+	]);
+
+	const scoreP2 = k.add([
+		k.text("0", {
+			size: 50,
+			width: 300,
+			align: "center",
+			font: "sans-serif",
+		}),
+		k.color("#c99355"),
+		k.outline(4, k.Color.BLACK),
+		k.pos((k.width() * 3) / 4, 50),
+		k.anchor("center"),
+		k.z(100),
+	]);
 
 	//Lógica de colisiones
 	ballEvents(b, p1, p2);
-	detectGoal(p1, p2);
+	detectGoal(p1, p2, scoreP1, scoreP2);
 
 	const pauseText = k.add([
 		k.text("PAUSA"),
