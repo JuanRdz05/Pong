@@ -2,6 +2,8 @@ import k from "../CANVAS/canvas.js";
 import createBall from "../BALL/ball.js";
 import { initBallMovement } from "../BALL/CONTROLLERS/movement";
 import { bounce } from "../BALL/CONTROLLERS/movement";
+import { createTrail } from "../PARTICLES/ball/trail";
+import { spawnSparks } from "../PARTICLES/ball/spark";
 import hitSound from "../SOUNDS/hit_sound.wav";
 import goalSound from "../SOUNDS/goal_sound.wav";
 
@@ -37,6 +39,7 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 
 export function ballEvents(ball, p1, p2) {
 	ball.onUpdate(() => {
+		createTrail(ball.pos.x, ball.pos.y);
 		bounce(ball);
 	});
 	ball.onCollide("player", (p) => {
@@ -44,7 +47,7 @@ export function ballEvents(ball, p1, p2) {
 			volume: 0.6,
 			speed: 2.5,
 		});
-
+		spawnSparks(ball.pos);
 		ball.vel.x = -ball.vel.x;
 
 		const speedMultiplier = 1.5;
