@@ -2,6 +2,10 @@ import k from "../CANVAS/canvas.js";
 import createBall from "../BALL/ball.js";
 import { initBallMovement } from "../BALL/CONTROLLERS/movement";
 import { bounce } from "../BALL/CONTROLLERS/movement";
+import hitSound from "../SOUNDS/hit_sound.wav";
+
+//Cargamos el sonido de impacto
+k.loadSound("impact", hitSound);
 
 export function detectGoal(p1, p2, scoreP1, scoreP2) {
 	k.onCollide("ball", "goal", (ball, goal) => {
@@ -25,15 +29,25 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 }
 
 export function ballEvents(ball, p1, p2) {
-	//Función para rebotar en las paredes
 	ball.onUpdate(() => {
 		bounce(ball);
 	});
 	ball.onCollide("player", (p) => {
+		k.play("impact", {
+			volume: 0.6,
+			speed: 2.5,
+		});
+
 		ball.vel.x = -ball.vel.x;
 
-		const accelX = 125;
-		ball.vel.x += ball.vel.x > 0 ? accelX : -accelX;
+		const speedMultiplier = 1.5;
+		ball.vel.x *= speedMultiplier;
+
+		//Agregamos un limite de velocidad
+		const maxSpeed = 1500;
+		if (Math.abs(ball.vel.x) > maxSpeed) {
+			ball.vel.x = ball.vel.x > 0 ? maxSpeed : -maxSpeed;
+		}
 
 		//Caluculamos la distancia relativa al centro del jugador
 		const centerPlayer = p.pos.y + p.height / 2;
@@ -43,7 +57,7 @@ export function ballEvents(ball, p1, p2) {
 		const normalizedImpact = (centerBall - centerPlayer) / p.height;
 
 		//Aplicamos la intensidad del impacto
-		const bounceIntensity = 1200;
+		const bounceIntensity = 1000;
 		ball.vel.y = normalizedImpact * bounceIntensity;
 
 		if (ball.pos.x < k.width() / 2) {

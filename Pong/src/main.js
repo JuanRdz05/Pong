@@ -6,6 +6,9 @@ import createBall from "./BALL/ball.js";
 import { initBallMovement, bounce } from "./BALL/CONTROLLERS/movement.js";
 import { createGoal } from "./GOAL/goal.js";
 import { detectGoal, ballEvents } from "./GOAL/detectarGol.js";
+import Press2P from "../public/fonts/Press_Start_2P/PressStart2P-Regular.ttf";
+
+k.loadFont("Press Start 2P", Press2P);
 
 k.scene("game", () => {
 	const p1 = createPlayer(120, "p1");
@@ -23,7 +26,7 @@ k.scene("game", () => {
 			size: 50,
 			width: 300,
 			align: "center",
-			font: "sans-serif",
+			font: "Press Start 2P",
 		}),
 		k.pos(k.width() / 4, 50),
 		k.color("#c99355"),
@@ -37,7 +40,7 @@ k.scene("game", () => {
 			size: 50,
 			width: 300,
 			align: "center",
-			font: "sans-serif",
+			font: "Press Start 2P",
 		}),
 		k.color("#c99355"),
 		k.outline(4, k.Color.BLACK),
@@ -73,4 +76,7 @@ k.scene("game", () => {
 	});
 });
 
-k.go("game");
+k.onLoad(() => {
+	console.log("Cargando assets del juego...");
+	k.go("game");
+});
