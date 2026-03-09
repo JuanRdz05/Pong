@@ -73,5 +73,4 @@ k.scene("game", () => {
 	});
 });
 
-// Arrancamos el motor
 k.go("game");
