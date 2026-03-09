@@ -3,9 +3,15 @@ import k from "../../CANVAS/canvas.js";
 import ballConfiguration from "../ballConfiguration.js";
 
 export function initBallMovement(ball) {
-	ball.vel.x = -400;
-	ball.vel.y = -400;
+	//Velocidad original 500
+	const speed = 500;
+	const angle = rand(0, 360);
+	ball.vel.x = speed;
+	ball.vel.y = Math.cos(angle) * speed;
+	//Velocidad inicial
+	console.log("Velocidad inicial: " + ball.vel);
 }
+
 //Función para que la pelota rebote en la parte superior e inferior de la pantalla
 export function bounce(ball) {
 	if (ball.pos.y + ballConfiguration.radius > k.height()) {
