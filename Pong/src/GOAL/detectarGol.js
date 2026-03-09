@@ -30,24 +30,28 @@ export function ballEvents(ball, p1, p2) {
 		bounce(ball);
 	});
 	ball.onCollide("player", (p) => {
-		// Invertimos la velocidad en X
 		ball.vel.x = -ball.vel.x;
+
+		const accelX = 125;
+		ball.vel.x += ball.vel.x > 0 ? accelX : -accelX;
+
+		//Caluculamos la distancia relativa al centro del jugador
+		const centerPlayer = p.pos.y + p.height / 2;
+		const centerBall = ball.pos.y;
+
+		//Normalizamos el impacto
+		const normalizedImpact = (centerBall - centerPlayer) / p.height;
+
+		//Aplicamos la intensidad del impacto
+		const bounceIntensity = 1200;
+		ball.vel.y = normalizedImpact * bounceIntensity;
+
 		if (ball.pos.x < k.width() / 2) {
-			//Jugador de la izquierda
-			//Aumento de velocidad
-			ball.vel.x += 20;
-			ball.vel.y -= 30;
 			ball.pos.x = p.pos.x + p.width + (ball.radius || 0) + 1;
 		} else {
-			//Jugador de la derecha
-			//Aumento de velocidad
-			ball.vel.x -= 20;
-			ball.vel.y += 30;
 			ball.pos.x = p.pos.x - (ball.radius || 0) - 1;
 		}
-		//Aumentar la velocidad por cada golpe
 
-		console.log("¡Rebote con jugador!");
-		console.log("Velocidad de la pelota: " + ball.vel);
+		console.log("Nuevo vector de velocidad:", ball.vel);
 	});
 }

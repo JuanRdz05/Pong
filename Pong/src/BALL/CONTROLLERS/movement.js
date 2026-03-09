@@ -5,9 +5,9 @@ import ballConfiguration from "../ballConfiguration.js";
 export function initBallMovement(ball) {
 	//Velocidad original 500
 	const speed = 500;
-	const angle = rand(0, 360);
-	ball.vel.x = speed;
-	ball.vel.y = Math.cos(angle) * speed;
+	const angle = Math.random() * Math.PI * 2;
+	ball.vel.x = Math.cos(angle) * speed;
+	ball.vel.y = Math.sin(angle) * speed;
 	//Velocidad inicial
 	console.log("Velocidad inicial: " + ball.vel);
 }
