@@ -44,7 +44,7 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 }
 
 function victoryPlayer(player, name) {
-	if (player.score >= 7) {
+	if (player.score >= 1) {
 		k.go("winner", { winnerName: name });
 	}
 }

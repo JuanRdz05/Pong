@@ -9,14 +9,18 @@ import { detectGoal, ballEvents } from "./GOAL/detectarGol.js";
 import { winnerPlayer } from "./WIN/win.js";
 import Press2P from "./fonts/Press_Start_2P/PressStart2P-Regular.ttf";
 import gameMusic from "./SOUNDS/game_music.wav";
+import menuSound from "./SOUNDS/menu_sound.wav";
 import "./SCENES/winner.js";
 
 //FONT DEL JUEGO
 k.loadFont("Press Start 2P", Press2P);
 //MUSICA DEL JUEGO
 k.loadSound("game_music", gameMusic);
+//SFX del menu
+k.loadSound("menu_sound", menuSound);
 
 let musicHandle = null;
+let isPaused = false;
 
 k.scene("game", () => {
 	const p1 = createPlayer(120, "p1");
@@ -88,17 +92,30 @@ k.scene("game", () => {
 		speed: 1.2,
 		loop: true,
 	});
+
+	k.onSceneLeave(() => {
+		if (musicHandle) {
+			musicHandle.stop("game_music");
+		}
+	});
 	k.onKeyPress("escape", () => {
-		k.debug.paused = !k.debug.paused;
-		pauseText.opacity = k.debug.paused ? 1 : 0;
+		k.play("menu_sound", {
+			volume: 0.3,
+			speed: 1.2,
+		});
+		isPaused = !isPaused;
+		pauseText.opacity = isPaused ? 1 : 0;
+		p1.paused = isPaused;
+		p2.paused = isPaused;
+		b.paused = isPaused;
 	});
 
 	k.onKeyPress("r", () => {
-		k.debug.paused = false;
-		musicHandle.stop();
-		k.wait(0.2, () => {
+		if (k.debug.paused) {
+			k.debug.paused = false;
+			if (musicHandle) musicHandle.stop();
 			k.go("game");
-		});
+		}
 	});
 });
 

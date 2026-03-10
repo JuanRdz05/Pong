@@ -2,29 +2,37 @@ import playerConfig from "./configuration.js";
 import k from "../CANVAS/canvas.js";
 import ball from "../BALL/ball.js";
 
-// En lugar de export const playerMovement = [...]
 export const initPlayerControls = (p1, p2, playerConfig) => {
-	// --- CONTROLES JUGADOR 1 (Izquierda) ---
+	// --- JUGADOR 1 ---
 	k.onKeyDown("w", () => {
+		// Usamos p1.paused. Si en main.js haces p1.paused = true, esto se detendrá.
+		if (p1.paused) return;
+
 		if (p1.pos.y > 0) {
 			p1.move(0, -playerConfig.speed);
 		}
 	});
 
 	k.onKeyDown("s", () => {
+		if (p1.paused) return;
+
 		if (p1.pos.y < k.height() - playerConfig.height) {
 			p1.move(0, playerConfig.speed);
 		}
 	});
 
-	// --- CONTROLES JUGADOR 2 (Derecha) ---
+	// --- JUGADOR 2 ---
 	k.onKeyDown("up", () => {
+		if (p2.paused) return;
+
 		if (p2.pos.y > 0) {
 			p2.move(0, -playerConfig.speed);
 		}
 	});
 
 	k.onKeyDown("down", () => {
+		if (p2.paused) return;
+
 		if (p2.pos.y < k.height() - playerConfig.height) {
 			p2.move(0, playerConfig.speed);
 		}

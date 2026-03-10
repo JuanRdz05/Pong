@@ -5,7 +5,9 @@ export function createPlayer(posX, tag) {
 	const isLeft = posX < k.width() / 2;
 
 	return k.add([
-		k.rect(playerConfiguration.width, playerConfiguration.height),
+		k.rect(playerConfiguration.width, playerConfiguration.height, {
+			radius: 15,
+		}),
 		k.pos(posX, k.height() / 2 - playerConfiguration.height / 2),
 		k.color("#c99355"),
 		k.area({
