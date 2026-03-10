@@ -1,9 +1,8 @@
 import k from "../../CANVAS/canvas";
-import ballConfiguration from "../../BALL/ballConfiguration";
 
 const createSpark = (x, y) => {
 	return k.add([
-		k.circle(k.rand(3, 7)),
+		k.circle(k.rand(3, 5)),
 		k.pos(x, y),
 		k.color("#ffffff"),
 		k.opacity(1),
@@ -22,7 +21,7 @@ const createSpark = (x, y) => {
 };
 
 export const spawnSparks = (hitPos) => {
-	for (let i = 0; i < 2; i++) {
+	for (let i = 0; i < 10; i++) {
 		createSpark(hitPos.x, hitPos.y);
 	}
 };

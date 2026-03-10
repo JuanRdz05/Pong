@@ -4,6 +4,7 @@ import { initBallMovement } from "../BALL/CONTROLLERS/movement";
 import { bounce } from "../BALL/CONTROLLERS/movement";
 import { createTrail } from "../PARTICLES/ball/trail";
 import { spawnSparks } from "../PARTICLES/ball/spark";
+import { createGoalExplosion } from "../PARTICLES/goal/goalExplosion";
 import hitSound from "../SOUNDS/hit_sound.wav";
 import goalSound from "../SOUNDS/goal_sound.wav";
 
@@ -18,6 +19,8 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 			volume: 2,
 			speed: 2,
 		});
+
+		createGoalExplosion(ball.pos, goal.is("left") ? "left" : "right");
 
 		if (goal.is("left")) {
 			//Anoto el jugador de la derecha
@@ -39,20 +42,31 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 
 export function ballEvents(ball, p1, p2) {
 	ball.onUpdate(() => {
-		createTrail(ball.pos.x, ball.pos.y);
+		createTrail(ball);
 		bounce(ball);
 	});
 	ball.onCollide("player", (p) => {
-		k.play("impact", {
-			volume: 0.6,
-			speed: 2.5,
-		});
+		if (
+			(ball.vel.x > 0 && ball.vel.x < 1000) ||
+			(ball.vel.x < 0 && ball.vel.x > -1000)
+		) {
+			k.play("impact", {
+				volume: 0.6,
+				speed: 2.5,
+			});
+		}
 		spawnSparks(ball.pos);
 		ball.vel.x = -ball.vel.x;
 
 		const speedMultiplier = 1.5;
 		ball.vel.x *= speedMultiplier;
-
+		if (ball.vel.x > 1000 || ball.vel.x < -1000) {
+			k.shake(10);
+			k.play("impact", {
+				volume: 0.8,
+				speed: 2.5,
+			});
+		}
 		//Agregamos un limite de velocidad
 		const maxSpeed = 1500;
 		if (Math.abs(ball.vel.x) > maxSpeed) {
