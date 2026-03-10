@@ -27,10 +27,12 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 			//Anoto el jugador de la derecha
 			p2.updateScore();
 			scoreP2.text = p2.score;
+			victoryPlayer(p2, "Jugador 2");
 		} else if (goal.is("right")) {
 			//Anoto el jugador de la izquierda
 			p1.updateScore();
 			scoreP1.text = p1.score;
+			victoryPlayer(p1, "Jugador 1");
 		}
 		k.destroy(ball);
 		k.wait(1, () => {
@@ -39,6 +41,12 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 			ballEvents(newBall, p1, p2);
 		});
 	});
+}
+
+function victoryPlayer(player, name) {
+	if (player.score >= 1) {
+		k.go("winner", { winnerName: name });
+	}
 }
 
 export function ballEvents(ball, p1, p2) {
