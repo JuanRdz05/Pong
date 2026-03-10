@@ -33,7 +33,7 @@ k.scene("game", () => {
 	if (musicHandle) {
 		musicHandle.stop();
 	}
-
+	const maxScore = 7;
 	//Inicializar el sistema
 	initBallMovement(b);
 	initPlayerControls(p1, p2, playerConfiguration);
@@ -49,7 +49,12 @@ k.scene("game", () => {
 		k.color(k.rgb(201, 147, 85)),
 		k.pos(k.width() / 4, 50),
 		k.anchor("center"),
+		k.scale(1),
+		k.animate({ relative: true }),
 		k.z(100),
+		{
+			maxScore: maxScore,
+		},
 	]);
 
 	const scoreP2 = k.add([
@@ -63,7 +68,12 @@ k.scene("game", () => {
 		k.color(k.rgb(201, 147, 85)),
 		k.pos((k.width() * 3) / 4, 50),
 		k.anchor("center"),
+		k.scale(1),
+		k.animate({ relative: true }),
 		k.z(100),
+		{
+			maxScore: maxScore,
+		},
 	]);
 
 	//Lógica de colisiones
@@ -99,17 +109,14 @@ k.scene("game", () => {
 		}
 	});
 	k.onKeyPress("escape", () => {
-		k.play("menu_sound", {
-			volume: 0.3,
-			speed: 1.2,
-		});
-		isPaused = !isPaused;
-		pauseText.opacity = isPaused ? 1 : 0;
-		p1.paused = isPaused;
-		p2.paused = isPaused;
-		b.paused = isPaused;
-	});
+		k.play("menu_sound", { volume: 0.3, speed: 1.2 });
 
+		isPaused = !isPaused;
+		// Esto congela TODO el motor (movimiento, cronómetros y updates)
+		k.debug.paused = isPaused;
+
+		pauseText.opacity = isPaused ? 1 : 0;
+	});
 	k.onKeyPress("r", () => {
 		if (k.debug.paused) {
 			k.debug.paused = false;

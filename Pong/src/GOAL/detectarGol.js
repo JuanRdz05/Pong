@@ -14,6 +14,85 @@ k.loadSound("impact", hitSound);
 k.loadSound("goal_sound", goalSound);
 let goalHandle = null;
 
+function colors(score) {
+	const paletaColores = [
+		k.rgb(255, 220, 150),
+		k.rgb(255, 180, 100),
+		k.rgb(230, 126, 34),
+		k.rgb(201, 147, 85),
+		k.rgb(180, 100, 50),
+		k.rgb(120, 70, 30),
+		k.rgb(180, 100, 50),
+		k.rgb(201, 147, 85),
+	];
+
+	let i = 0;
+
+	function runNextTween() {
+		if (i >= paletaColores.length) return;
+		k.tween(
+			score.color,
+			paletaColores[i],
+			0.1,
+			(v) => (score.color = v),
+			k.easings.easeOutElastic,
+		).then(() => {
+			i++;
+			runNextTween(); // Llama al siguiente color cuando este termina
+		});
+	}
+
+	runNextTween();
+}
+
+function tweenScale(score) {
+	const escalas = [k.vec2(0.8), k.vec2(1), k.vec2(1.5), k.vec2(1)];
+	let i = 0;
+
+	function loopTween() {
+		if (i >= escalas.length) return;
+
+		k.tween(
+			score.scale,
+			escalas[i],
+			0.15,
+			(v) => (score.scale = v),
+			k.easings.easeOutBack,
+		).then(() => {
+			i++;
+			loopTween();
+		});
+	}
+
+	loopTween();
+}
+
+function tweenScore(score) {
+	tweenScale(score);
+	colors(score);
+}
+
+function scoreAnimation(score) {
+	score.animate(
+		"color",
+		[
+			k.rgb(255, 220, 150),
+			k.rgb(255, 180, 100),
+			k.rgb(230, 126, 34),
+			k.rgb(201, 147, 85),
+			k.rgb(180, 100, 50),
+			k.rgb(120, 70, 30),
+			k.rgb(180, 100, 50),
+			k.rgb(201, 147, 85),
+		],
+		{
+			loop: true,
+			easing: k.easings.easeOutElastic,
+			duration: 0.2,
+		},
+	);
+}
+
 export function detectGoal(p1, p2, scoreP1, scoreP2) {
 	k.onCollide("ball", "goal", (ball, goal) => {
 		goalHandle = k.play("goal_sound", {
@@ -27,11 +106,19 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 			//Anoto el jugador de la derecha
 			p2.updateScore();
 			scoreP2.text = p2.score;
+			tweenScore(scoreP2);
+			if (p2.score >= p2.maxScore - 1) {
+				scoreAnimation(scoreP2);
+			}
 			victoryPlayer(p2, "Jugador 2");
 		} else if (goal.is("right")) {
 			//Anoto el jugador de la izquierda
 			p1.updateScore();
+			tweenScore(scoreP1);
 			scoreP1.text = p1.score;
+			if (p1.score >= p1.maxScore - 1) {
+				scoreAnimation(scoreP1);
+			}
 			victoryPlayer(p1, "Jugador 1");
 		}
 		k.destroy(ball);
@@ -44,14 +131,17 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 }
 
 function victoryPlayer(player, name) {
-	if (player.score >= 1) {
-		k.go("winner", { winnerName: name });
+	if (player.score >= player.maxScore) {
+		k.wait(1, () => {
+			k.go("winner", { winnerName: name });
+		});
 	}
 }
 
 export function ballEvents(ball, p1, p2) {
 	ball.onUpdate(() => {
-		bounce(ball); //
+		if (ball.paused) return;
+		bounce(ball);
 
 		const speedPhase1 = 600;
 		if (Math.abs(ball.vel.x) >= speedPhase1) {
