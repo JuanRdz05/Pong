@@ -1,4 +1,5 @@
 import k from "../CANVAS/canvas.js";
+import { createTrail } from "../PARTICLES/ball/trail.js";
 
 export function speedBall(MaxSpeed, ballSpeed, ball) {
 	const speedPhase1 = 600;

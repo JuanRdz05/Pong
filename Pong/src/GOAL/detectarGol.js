@@ -44,15 +44,19 @@ export function detectGoal(p1, p2, scoreP1, scoreP2) {
 }
 
 function victoryPlayer(player, name) {
-	if (player.score >= 1) {
+	if (player.score >= 7) {
 		k.go("winner", { winnerName: name });
 	}
 }
 
 export function ballEvents(ball, p1, p2) {
 	ball.onUpdate(() => {
-		createTrail(ball);
-		bounce(ball);
+		bounce(ball); //
+
+		const speedPhase1 = 600;
+		if (Math.abs(ball.vel.x) >= speedPhase1) {
+			createTrail(ball);
+		}
 	});
 	ball.onCollide("player", (p) => {
 		if (

@@ -8,7 +8,7 @@ export const createTrail = (ball) => {
 
 	// Configuración dinámica basada en la velocidad
 	const config = {
-		length: k.map(currentSpeed, 0, 1500, 20, 80),
+		length: k.map(currentSpeed, 0, 700, 10, 30),
 		width: (ball.radius || 8) * 2,
 		duration: 0.2,
 		color: ball.color || k.rgb(162, 119, 69),
