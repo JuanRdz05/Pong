@@ -26,9 +26,35 @@ k.scene("winner", (data) => {
 		k.pos(k.center().x, k.center().y + 100),
 		k.color(162, 119, 69),
 		k.anchor("center"),
+		k.scale(1),
 		k.area(),
 		"button",
 	]);
+
+	function tween_animations(btn) {
+		k.tween(
+			btn.scale, // Valor inicial
+			k.vec2(1.2), // Valor final
+			0.3, // Duración (0.3 seg)
+			(v) => (btn.scale = v), // Qué propiedad vamos a cambiar
+			k.easings.easeOutBack, // Estilo de suavizado
+		);
+		k.tween(
+			btn.color,
+			k.rgb(227, 136, 32),
+			0.3,
+			(v) => (btn.color = v),
+			k.easings.easeInBounce,
+		);
+	}
+
+	function tweenClick(btn) {
+		k.tween(btn.scale, k.vec2(0.9), 0.1, (v) => (btn.scale = v)).onEnd(() => {
+			k.wait(0.6, () => {
+				k.go("game");
+			});
+		});
+	}
 
 	// Texto dentro del botón
 	btn.add([
@@ -47,6 +73,11 @@ k.scene("winner", (data) => {
 		k.setCursor("pointer");
 	});
 
+	//Hover del botón
+	btn.onHover(() => {
+		tween_animations(btn);
+	});
+
 	btn.onHoverEnd(() => {
 		btn.scale = k.vec2(1);
 		btn.color = k.rgb(162, 119, 69);
@@ -58,9 +89,8 @@ k.scene("winner", (data) => {
 			volume: 3,
 			speed: 1.2,
 		});
-		k.wait(0.5, () => {
-			k.go("game");
-		});
+		tween_animations(btn);
+		tweenClick(btn);
 	});
 
 	k.onKeyPress("enter", () => {
@@ -68,9 +98,8 @@ k.scene("winner", (data) => {
 			volume: 3,
 			speed: 1.2,
 		});
-		k.wait(0.5, () => {
-			k.go("game");
-		});
+		tween_animations(btn);
+		tweenClick(btn);
 	});
 
 	musicHandle = k.play("winner_sound", {

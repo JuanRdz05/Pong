@@ -5,7 +5,6 @@ import ball from "../BALL/ball.js";
 export const initPlayerControls = (p1, p2, playerConfig) => {
 	// --- JUGADOR 1 ---
 	k.onKeyDown("w", () => {
-		// Usamos p1.paused. Si en main.js haces p1.paused = true, esto se detendrá.
 		if (p1.paused) return;
 
 		if (p1.pos.y > 0) {
