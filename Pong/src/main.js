@@ -6,6 +6,7 @@ import createBall from "./BALL/ball.js";
 import { initBallMovement, bounce } from "./BALL/CONTROLLERS/movement.js";
 import { createGoal } from "./GOAL/goal.js";
 import { detectGoal, ballEvents } from "./GOAL/detectarGol.js";
+import { winner } from "./WIN/win.js";
 import Press2P from "./fonts/Press_Start_2P/PressStart2P-Regular.ttf";
 import gameMusic from "./SOUNDS/game_music.wav";
 
@@ -78,7 +79,8 @@ k.scene("game", () => {
 	]);
 
 	initPlayerControls(p1, p2, playerConfiguration);
-
+	//Lógica para el ganador
+	winner(p1, p2);
 	//Inicializamos la musica
 	musicHandle = k.play("game_music", {
 		volume: 0.3,

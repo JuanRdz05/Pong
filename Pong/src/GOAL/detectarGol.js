@@ -5,6 +5,7 @@ import { bounce } from "../BALL/CONTROLLERS/movement";
 import { createTrail } from "../PARTICLES/ball/trail";
 import { spawnSparks } from "../PARTICLES/ball/spark";
 import { createGoalExplosion } from "../PARTICLES/goal/goalExplosion";
+import { speedBall } from "../GOAL/speedBall";
 import hitSound from "../SOUNDS/hit_sound.wav";
 import goalSound from "../SOUNDS/goal_sound.wav";
 
@@ -58,7 +59,7 @@ export function ballEvents(ball, p1, p2) {
 		spawnSparks(ball.pos);
 		ball.vel.x = -ball.vel.x;
 
-		const speedMultiplier = 1.5;
+		const speedMultiplier = 1.2;
 		ball.vel.x *= speedMultiplier;
 		if (ball.vel.x > 1000 || ball.vel.x < -1000) {
 			k.shake(10);
@@ -68,11 +69,12 @@ export function ballEvents(ball, p1, p2) {
 			});
 		}
 		//Agregamos un limite de velocidad
-		const maxSpeed = 1500;
-		if (Math.abs(ball.vel.x) > maxSpeed) {
+		const maxSpeed = 1800;
+		if (Math.abs(ball.vel.x) >= maxSpeed) {
 			ball.vel.x = ball.vel.x > 0 ? maxSpeed : -maxSpeed;
 		}
 
+		speedBall(maxSpeed, ball.vel.x, ball);
 		//Caluculamos la distancia relativa al centro del jugador
 		const centerPlayer = p.pos.y + p.height / 2;
 		const centerBall = ball.pos.y;

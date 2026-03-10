@@ -1,30 +1,44 @@
-import k from "../../CANVAS/canvas";
-
+import k from "../../CANVAS/canvas.js";
 export const createTrail = (ball) => {
 	if (!ball || !ball.vel || ball.vel.len() === 0) return;
 
-	// 1. Obtenemos la dirección de la bola y su perpendicular (normal)
-	const dir = ball.vel.unit(); // Hacia dónde va
-	const norm = dir.normal(); // El "ancho" (hacia los lados)
+	const currentSpeed = ball.vel.len();
+	const direction = ball.vel.unit();
+	const perpendicular = direction.normal();
 
-	const length = 45;
-	const ballRadius = ball.radius || 8;
-	const p1 = norm.scale(ballRadius); // Esquina superior base
-	const p4 = norm.scale(-ballRadius); // Esquina inferior base
-	const p2 = dir.scale(-length).add(norm.scale(1)); // Punta arriba (ancho casi 0)
-	const p3 = dir.scale(-length).add(norm.scale(-1)); // Punta abajo (ancho casi 0)
+	// Configuración dinámica basada en la velocidad
+	const config = {
+		length: k.map(currentSpeed, 0, 1500, 20, 80),
+		width: (ball.radius || 8) * 2,
+		duration: 0.2,
+		color: ball.color || k.rgb(162, 119, 69),
+		opacity: 0.5,
+	};
+
+	const halfWidth = config.width / 2;
+	// Puntos del trapecio
+	const p1 = perpendicular.scale(halfWidth);
+	const p2 = perpendicular.scale(-halfWidth);
+	const p3 = direction.scale(-config.length).add(perpendicular.scale(-0.5));
+	const p4 = direction.scale(-config.length).add(perpendicular.scale(0.5));
 
 	return k.add([
 		k.pos(ball.pos),
-		k.polygon([p1, p2, p3, p4]), // Dibuja la forma cerrada
-		k.color("#a27745"),
-		k.opacity(0.4),
+		k.polygon([p1, p4, p3, p2]),
+		k.color(config.color),
+		k.opacity(config.opacity),
 		k.z(-1),
 		"trail",
 		{
+			elapsed: 0,
 			update() {
-				this.opacity -= k.dt() * 4;
-				if (this.opacity <= 0) k.destroy(this);
+				this.elapsed += k.dt();
+				const progress = Math.min(this.elapsed / config.duration, 1);
+				this.opacity = config.opacity * (1 - progress);
+
+				if (progress >= 1) {
+					k.destroy(this);
+				}
 			},
 		},
 	]);
