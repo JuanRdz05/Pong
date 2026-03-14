@@ -3,7 +3,7 @@ import k from "../CANVAS/canvas.js";
 
 export function createPlayer(posX, tag) {
 	const isLeft = posX < k.width() / 2;
-	const maxScore = 7;
+	const maxScore = 1;
 	return k.add([
 		k.rect(playerConfiguration.width, playerConfiguration.height, {
 			radius: 15,
